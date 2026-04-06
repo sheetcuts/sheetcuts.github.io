@@ -717,6 +717,143 @@ footer {
 
 .page-content a { color: var(--brand); }
 
+/* ─── Shortcuts Page ─────────────────────────────────────────── */
+.shortcuts-container {
+  padding-top: 56px;
+  padding-bottom: 96px;
+}
+
+.shortcuts-page-section {
+  margin-bottom: 72px;
+}
+
+.shortcuts-app-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--border);
+}
+
+.shortcuts-app-header h2 {
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.shortcuts-app-header p {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+}
+
+.shortcut-tab-group {
+  margin-bottom: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.shortcut-tab-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 16px;
+  background: var(--bg-subtle);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: 0.01em;
+}
+
+.shortcut-tab-seq {
+  font-family: monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--brand-light);
+  color: var(--brand-dark);
+  border: 1px solid var(--brand-border);
+  border-radius: 4px;
+  padding: 1px 7px;
+}
+
+.shortcut-tab-body {
+  padding: 16px;
+}
+
+.shortcut-subgroup {
+  margin-bottom: 16px;
+}
+
+.shortcut-subgroup:last-child {
+  margin-bottom: 0;
+}
+
+.shortcut-subgroup-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--text-muted);
+  margin-bottom: 6px;
+}
+
+.shortcuts-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+}
+
+.shortcut-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 5px 6px;
+  border-radius: 5px;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.shortcut-row:hover {
+  background: var(--bg-subtle);
+}
+
+.shortcut-key {
+  font-family: monospace;
+  font-size: 0.7rem;
+  font-weight: 600;
+  background: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--text-primary);
+  padding: 2px 6px;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.shortcuts-coming-soon {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-top: 16px;
+}
+
+.feature-card-see-all {
+  display: inline-block;
+  font-size: 0.8rem;
+  color: var(--brand);
+  margin-top: 14px;
+  font-weight: 500;
+}
+
+.feature-card-see-all:hover {
+  color: var(--brand-dark);
+}
+
 /* ─── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 768px) {
   section { padding: 64px 0; }
