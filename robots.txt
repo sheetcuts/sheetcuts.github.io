@@ -1,0 +1,5 @@
+# SheetCuts — allow all crawlers, including AI/search assistants.
+User-agent: *
+Allow: /
+
+Sitemap: https://www.sheetcuts.app/sitemap.xml
