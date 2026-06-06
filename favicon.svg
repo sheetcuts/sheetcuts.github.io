@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- SheetCuts favicon — simplified mark (split tile + single Alt key) for tiny tab sizes. -->
+  <defs>
+    <linearGradient id="gGreen" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1bb257"/><stop offset="1" stop-color="#0e8043"/>
+    </linearGradient>
+    <linearGradient id="gOrange" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fb923c"/><stop offset="1" stop-color="#ea580c"/>
+    </linearGradient>
+    <linearGradient id="cap" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#eef2f0"/>
+    </linearGradient>
+    <clipPath id="tile"><rect width="128" height="128" rx="26"/></clipPath>
+  </defs>
+  <g clip-path="url(#tile)">
+    <rect x="0"  y="0" width="64" height="128" fill="url(#gGreen)"/>
+    <rect x="64" y="0" width="64" height="128" fill="url(#gOrange)"/>
+    <line x1="64" y1="0" x2="64" y2="128" stroke="#ffffff" stroke-opacity="0.45" stroke-width="2"/>
+    <rect x="28" y="50" width="72" height="36" rx="11" fill="#0f172a" opacity="0.30"/>
+    <rect x="28" y="46" width="72" height="36" rx="11" fill="url(#cap)"/>
+    <text x="64" y="65" text-anchor="middle" font-family="Inter, 'Segoe UI', Arial, sans-serif" font-weight="800" font-size="30" fill="#1f2937">Alt</text>
+  </g>
+</svg>
