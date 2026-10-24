@@ -1,0 +1,56 @@
+/* practice-sheet.css — the onboarding mini spreadsheet (practice-sheet.js).
+   Shared by the extension's welcome.html and sheetcuts.app/onboarding, so it
+   uses literal colours rather than either page's CSS variables. */
+
+.sandbox {
+  position: relative; border: 1px solid #cbd5e1; border-radius: 10px; background: #fff;
+  font-family: Arial, sans-serif; font-size: 13px; color: #202124; cursor: cell;
+}
+.sandbox:focus { border-color: #16a34a; outline: none; box-shadow: 0 0 0 3px rgba(134, 239, 172, 0.6); }
+
+.sb-bar {
+  display: flex; align-items: center; gap: 8px; border-bottom: 1px solid #e2e8f0; padding: 5px 8px;
+  background: #f8fafc; border-radius: 10px 10px 0 0;
+}
+.sb-namebox { min-width: 46px; font-size: 12px; border: 1px solid #e2e8f0; background: #fff; border-radius: 4px; padding: 1px 6px; }
+.sb-fx { color: #94a3b8; font-style: italic; font-size: 12px; }
+.sb-formula { font-size: 12px; color: #475569; }
+
+.sb-gridwrap { overflow-x: auto; }
+.sb-grid { border-collapse: collapse; width: 100%; min-width: 420px; table-layout: fixed; }
+.sb-grid th {
+  background: #f8f9fa; color: #5f6368; font-weight: 400; font-size: 11px; height: 22px;
+  border: 1px solid #e2e3e3; text-align: center;
+}
+.sb-grid th.row-h { width: 34px; }
+.sb-grid th.sel { background: #d3e3fd; color: #0b57d0; font-weight: 600; }
+.sb-grid td {
+  height: 26px; border: 1px solid #e2e3e3; padding: 0 6px; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; position: relative;
+}
+.sb-grid td.num { text-align: right; }
+.sb-grid td.active { outline: 2px solid #1a73e8; outline-offset: -2px; z-index: 1; }
+.sb-grid td.bt { border-top: 1.5px solid #111; }
+.sb-grid td.bb { border-bottom: 1.5px solid #111; }
+.sb-grid td.bl { border-left: 1.5px solid #111; }
+.sb-grid td.br { border-right: 1.5px solid #111; }
+
+.sb-focus-hint {
+  text-align: center; font: 600 12px -apple-system, "Segoe UI", sans-serif;
+  color: #15803d; background: #ecfdf3; border-top: 1px solid #bbf7d0; padding: 6px;
+  border-radius: 0 0 10px 10px;
+}
+.sb-focus-hint kbd {
+  display: inline-block; padding: 0 6px; font: 700 11px/1.6 -apple-system, "Segoe UI", sans-serif;
+  color: #111827; background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px; border-radius: 5px;
+}
+.sandbox:focus .sb-focus-hint { visibility: hidden; }
+
+.sb-palette {
+  position: absolute; z-index: 3; background: #fff; border: 1px solid #dadce0; border-radius: 8px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18); padding: 8px; display: grid; grid-template-columns: repeat(8, 18px); gap: 4px;
+}
+.sb-palette[hidden] { display: none; }
+.sb-palette .sw { width: 18px; height: 18px; border-radius: 50%; border: 1px solid rgba(0, 0, 0, 0.12); cursor: pointer; }
+.sb-palette .sw.on { outline: 3px solid #16a34a; outline-offset: 1px; }
+.sb-palette .pal-hint { grid-column: 1 / -1; font: 11px -apple-system, "Segoe UI", sans-serif; color: #6b7280; margin-top: 2px; }

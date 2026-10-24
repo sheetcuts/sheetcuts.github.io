@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; base-uri 'self'; form-action 'self'">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Get Started with SheetCuts — Excel Shortcuts in Google Sheets in 2 Minutes</title>
+  <meta name="description" content="Set up SheetCuts in six quick steps: pin it, start your free trial, practice the Alt-key ribbon right on this page, build your Quick Access Toolbar, and turn on Trace Precedents & Dependents.">
+  <link rel="canonical" href="https://www.sheetcuts.app/onboarding">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Get started with SheetCuts">
+  <meta property="og:description" content="Your Excel muscle memory, now in Google Sheets. Practice the Alt-key ribbon right on the page.">
+  <meta property="og:url" content="https://www.sheetcuts.app/onboarding">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <!-- Copied from the extension by practice/_sync-practice.sh — don't edit here -->
+  <link rel="stylesheet" href="practice/overlay.css">
+  <link rel="stylesheet" href="practice/practice-sheet.css">
+  <link rel="stylesheet" href="onboarding.css">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav>
+    <div class="container nav-inner">
+      <a href="/" class="nav-logo">Sheet<span>Cuts</span></a>
+      <ul class="nav-links">
+        <li><a href="/#how-it-works">How it works</a></li>
+        <li><a href="/#features">Features</a></li>
+        <li><a href="/shortcuts">All Shortcuts</a></li>
+        <li><a href="/#pricing">Pricing</a></li>
+        <li><a href="/#faq">FAQ</a></li>
+      </ul>
+      <a href="https://chromewebstore.google.com/detail/sheetcuts/gdgindnabolfjpibpclidgkjghapodpd" target="_blank" rel="noopener" class="btn btn-primary">Add to Chrome</a>
+    </div>
+  </nav>
+
+  <!-- Page Header -->
+  <header class="page-header ob-header">
+    <div class="container ob-wrap">
+      <p class="section-label">Get started</p>
+      <h1>Your Excel muscle memory, now in Google Sheets.</h1>
+      <p class="ob-lede">Six quick steps — about two minutes. Tick each one off as you go; your progress is saved in this browser.</p>
+      <div class="ob-progress" aria-live="polite">
+        <div class="ob-bar"><div id="progressBar"></div></div>
+        <span id="progressText">0 of 6 done</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="container ob-wrap">
+    <ol class="ob-steps">
+
+      <!-- 1. Install & pin -->
+      <li class="ob-step" data-step="pin">
+        <div class="ob-num"><span>1</span></div>
+        <div class="ob-body">
+          <h2>Add SheetCuts to Chrome and pin it</h2>
+          <p>Already installed? Skip straight to pinning: click the puzzle-piece <span aria-hidden="true">🧩</span> at the top-right of Chrome, then the pin <span aria-hidden="true">📌</span> next to <b>SheetCuts</b>. Pinned, it’s one click to your settings and the on/off switch.</p>
+          <div class="ob-actions">
+            <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/sheetcuts/gdgindnabolfjpibpclidgkjghapodpd" target="_blank" rel="noopener">Add to Chrome — free trial</a>
+            <button type="button" class="btn btn-outline ob-check" data-check="pin">It’s pinned</button>
+          </div>
+        </div>
+      </li>
+
+      <!-- 2. Trial -->
+      <li class="ob-step" data-step="signin">
+        <div class="ob-num"><span>2</span></div>
+        <div class="ob-body">
+          <h2>Start your 14-day free trial</h2>
+          <p>Open any Google Sheet and press <kbd>Alt</kbd>. The first time, SheetCuts asks you to sign in with the Google account you use for Sheets — that starts your trial. No card needed; after 14 days it’s $6/mo or $49/yr.</p>
+          <div class="ob-actions">
+            <a class="btn btn-primary" href="https://docs.google.com/spreadsheets/u/0/create" target="_blank" rel="noopener">Open a blank Google Sheet</a>
+            <button type="button" class="btn btn-outline ob-check" data-check="signin">I’m signed in</button>
+          </div>
+        </div>
+      </li>
+
+      <!-- 3. Practice -->
+      <li class="ob-step" data-step="practice">
+        <div class="ob-num"><span>3</span></div>
+        <div class="ob-body">
+          <h2>Practice right here</h2>
+          <p>This mini-sheet behaves like the real thing — no install needed. <b>Click it</b>, then press <kbd>Alt</kbd>: the key tips appear at the bottom of the screen. Type the letters one after another; there’s no need to hold Alt.</p>
+          <p class="ob-touch-note">The practice sheet needs a keyboard — try it on your computer.</p>
+          <div class="ob-practice">
+            <div id="sandbox"></div>
+            <ul class="ob-tasks">
+              <li data-task="bold"><span class="ob-tick"></span><div><b>Bold a cell</b><br><kbd>Alt</kbd> › <kbd>H</kbd> › <kbd>1</kbd></div></li>
+              <li data-task="fill"><span class="ob-tick"></span><div><b>Fill it with colour</b><br><kbd>Alt</kbd> › <kbd>H</kbd> › <kbd>H</kbd>, arrows to pick, <kbd>Enter</kbd></div></li>
+              <li data-task="repeat"><span class="ob-tick"></span><div><b>Repeat it elsewhere</b><br>Move with the arrows, press <kbd>F4</kbd> — it repeats the exact colour</div></li>
+              <li data-task="qat"><span class="ob-tick"></span><div><b>Use Quick Access</b><br><kbd>Alt</kbd> › <kbd>1</kbd> … <kbd>9</kbd> runs your favourites (try a layout in step 4)</div></li>
+            </ul>
+          </div>
+          <p class="ob-status" id="practiceStatus"></p>
+        </div>
+      </li>
+
+      <!-- 4. Quick Access -->
+      <li class="ob-step" data-step="qat">
+        <div class="ob-num"><span>4</span></div>
+        <div class="ob-body">
+          <h2>Build your Quick Access Toolbar</h2>
+          <p>Just like Excel: up to nine favourites on <kbd>Alt</kbd> › <kbd>1</kbd>–<kbd>9</kbd>. Tap commands below to try a layout in the practice sheet, then set yours for real in SheetCuts Settings — press <kbd>Alt</kbd> › <kbd>F</kbd> › <kbd>T</kbd> in any sheet, or click the SheetCuts icon › <b>Customize shortcuts</b>. That’s also where you add your own key combos and Alt sequences.</p>
+          <div class="ob-qat-preview" id="qatPreview"></div>
+          <div class="ob-chips" id="qatChips"></div>
+          <div class="ob-actions">
+            <button type="button" class="btn btn-outline ob-check" data-check="qat">Set it up in Settings</button>
+          </div>
+        </div>
+      </li>
+
+      <!-- 5. Trace -->
+      <li class="ob-step" data-step="trace">
+        <div class="ob-num"><span>5</span></div>
+        <div class="ob-body">
+          <h2>Trace Precedents &amp; Dependents <span class="ob-tag">Optional</span></h2>
+          <p><kbd>Ctrl</kbd>+<kbd>[</kbd> and <kbd>Ctrl</kbd>+<kbd>]</kbd> — just like Excel — (or <kbd>Alt</kbd> › <kbd>M</kbd> › <kbd>P</kbd> / <kbd>D</kbd>) list every cell that feeds, or reads from, your selection across every tab. <kbd>Enter</kbd> jumps to each one.</p>
+          <p class="ob-privacy">🔒 The first time you trace, Chrome asks to let SheetCuts read files from <b>googleusercontent.com</b> — that’s where Google serves your spreadsheet’s own download. It goes straight into your browser: nothing is uploaded to us, and no extra Google account access is requested. <a href="/privacy">Privacy policy</a></p>
+          <div class="ob-actions">
+            <button type="button" class="btn btn-outline ob-check" data-check="trace">Tried it</button>
+          </div>
+        </div>
+      </li>
+
+      <!-- 6. Real sheet -->
+      <li class="ob-step" data-step="real">
+        <div class="ob-num"><span>6</span></div>
+        <div class="ob-body">
+          <h2>Use it in a real sheet</h2>
+          <p>Open any Google Sheet (or Slides deck) and press <kbd>Alt</kbd>. <kbd>F4</kbd> repeats your last command — even a colour you picked or a width you typed.</p>
+          <div class="ob-actions">
+            <a class="btn btn-primary" href="https://docs.google.com/spreadsheets/u/0/create" target="_blank" rel="noopener">Open a blank Google Sheet</a>
+            <a class="btn btn-outline" href="/shortcuts">Full shortcut list</a>
+            <button type="button" class="btn btn-outline ob-check" data-check="real">Done</button>
+          </div>
+        </div>
+      </li>
+    </ol>
+
+    <section class="ob-done" id="doneCard" hidden>
+      <h2>You’re all set 🎉</h2>
+      <p>If SheetCuts saves you time, a quick review helps other Excel people find it — it’s the single biggest thing you can do for a small, independent tool.</p>
+      <div class="ob-actions">
+        <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/gdgindnabolfjpibpclidgkjghapodpd/reviews" target="_blank" rel="noopener">Leave a review</a>
+        <a class="btn btn-outline" href="mailto:sheetcuts@gmail.com?subject=SheetCuts%20feedback">Send feedback</a>
+      </div>
+    </section>
+
+    <section class="ob-demo">
+      <h2>See it in action</h2>
+      <video src="demo.mp4" autoplay loop muted playsinline
+             aria-label="SheetCuts demo — press Alt to reveal the ribbon of shortcuts"></video>
+    </section>
+
+    <p class="ob-foot">Questions or feedback? <a href="mailto:sheetcuts@gmail.com?subject=SheetCuts%20feedback">Email us</a> — a real person reads every one.</p>
+  </main>
+
+  <div id="toast" class="ob-toast" role="status" aria-live="polite"></div>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-logo">Sheet<span>Cuts</span></div>
+      <ul class="footer-links">
+        <li><a href="/onboarding">Get started</a></li>
+        <li><a href="/shortcuts">All Shortcuts</a></li>
+        <li><a href="/alternatives">Alternatives</a></li>
+        <li><a href="/privacy">Privacy Policy</a></li>
+        <li><a href="/terms">Terms of Service</a></li>
+        <li><a href="mailto:sheetcuts@gmail.com">Contact</a></li>
+      </ul>
+      <p class="footer-copy">&copy; 2026 SheetCuts. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Copied from the extension by practice/_sync-practice.sh — don't edit here -->
+  <script src="practice/shortcuts.js"></script>
+  <script src="practice/custom-shortcuts.js"></script>
+  <script src="practice/overlay.js"></script>
+  <script src="practice/practice-sheet.js"></script>
+  <script src="onboarding.js"></script>
+</body>
+</html>

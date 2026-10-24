@@ -1,0 +1,431 @@
+/* ============================================================
+   Alt Keys — key-tips overlay styles
+   ============================================================ */
+
+#alt-keys-overlay {
+  position: fixed;
+  bottom: 52px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+
+  /* hidden by default; JS sets display:flex to show */
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+
+  /* don't capture mouse clicks — let them pass through to the sheet */
+  pointer-events: none;
+
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  max-width: 92vw;
+  filter: drop-shadow(0 4px 18px rgba(0, 0, 0, 0.40));
+}
+
+/* ── Breadcrumb header ────────────────────────────────────── */
+.alt-keys-header {
+  background: #16a34a;
+  color: #ffffff;
+  padding: 4px 16px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  white-space: nowrap;
+}
+
+/* ── Badge row ────────────────────────────────────────────── */
+.alt-keys-badge-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 5px;
+  max-width: 92vw;
+}
+
+/* Individual badge */
+.alt-keys-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+
+  background: rgba(26, 27, 30, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  padding: 7px 11px 5px;
+  min-width: 52px;
+}
+
+/* Branch badge — has child keys */
+.alt-keys-badge.alt-keys-branch {
+  border-color: rgba(251, 188, 4, 0.50);
+}
+
+/* Stub badge — not yet implemented */
+.alt-keys-badge.alt-keys-stub {
+  opacity: 0.30;
+}
+
+/* Quick Access Toolbar slot (Alt+1…9) — brand green */
+.alt-keys-badge.alt-keys-qat {
+  border-color: rgba(34, 197, 94, 0.70);
+  background: rgba(20, 83, 45, 0.92);
+}
+.alt-keys-badge.alt-keys-qat .alt-keys-key {
+  color: #86efac;
+}
+
+/* User-defined Alt sequence — orange accent */
+.alt-keys-badge.alt-keys-custom {
+  border-color: rgba(251, 146, 60, 0.75);
+}
+.alt-keys-badge.alt-keys-custom .alt-keys-key {
+  color: #fdba74;
+}
+
+/* Key letter */
+.alt-keys-key {
+  color: #fbbc04;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: 0.5px;
+}
+
+/* Description text */
+.alt-keys-desc {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 11px;
+  line-height: 1.2;
+  margin-top: 3px;
+  white-space: nowrap;
+  text-align: center;
+}
+
+/* Branch arrow indicator (top-right corner of badge) */
+.alt-keys-arrow {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  color: #fbbc04;
+  font-size: 8px;
+  opacity: 0.70;
+}
+
+/* Hint text below the badges — on its own dark pill so it stays legible
+   over the white grid */
+.alt-keys-hint {
+  color: rgba(255, 255, 255, 0.78);
+  background: rgba(26, 27, 30, 0.88);
+  border-radius: 10px;
+  padding: 2px 10px;
+  font-size: 11px;
+  margin-top: 1px;
+}
+
+/* ── Inline notice (executing / not-implemented) ─────────── */
+.alt-keys-notice {
+  background: rgba(26, 27, 30, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 8px 20px;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+#alt-keys-overlay.alt-keys-executing .alt-keys-notice {
+  border-color: rgba(52, 168, 83, 0.55);
+  color: #81c995;
+}
+
+#alt-keys-overlay.alt-keys-stub-notice .alt-keys-notice {
+  border-color: rgba(234, 67, 53, 0.45);
+  color: rgba(255, 190, 185, 0.90);
+}
+
+/* ── Trial countdown banner ──────────────────────────────── */
+.alt-keys-trial-banner {
+  background: rgba(251, 188, 4, 0.18);
+  border: 1px solid rgba(251, 188, 4, 0.50);
+  border-radius: 8px;
+  color: #fbc02d;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 8px 20px;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+}
+
+
+/* ── Lockout / upgrade overlay ───────────────────────────── */
+
+/* Override pointer-events only when lockout is active (set inline by JS) */
+#alt-keys-overlay.alt-keys-lockout {
+  gap: 12px;
+}
+
+.alt-keys-lockout-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+
+  background: rgba(26, 27, 30, 0.97);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 12px;
+  padding: 20px 28px 18px;
+  max-width: 420px;
+  text-align: center;
+}
+
+.alt-keys-lockout-title {
+  margin: 0;
+  color: #ffffff;
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.alt-keys-lockout-subtitle {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.alt-keys-lockout-btns {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+/* Shared button base */
+.alt-keys-btn {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 18px;
+  white-space: nowrap;
+  transition: opacity 0.15s;
+}
+
+.alt-keys-btn:hover {
+  opacity: 0.88;
+}
+
+.alt-keys-btn:active {
+  opacity: 0.75;
+}
+
+/* Visible focus ring so the upgrade/sign-in buttons are keyboard-operable */
+.alt-keys-btn:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+}
+
+/* Secondary button — monthly plan */
+.alt-keys-btn-secondary {
+  background: rgba(255, 255, 255, 0.10);
+  color: rgba(255, 255, 255, 0.80);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+}
+
+/* Primary button — annual plan (highlighted) */
+.alt-keys-btn-primary {
+  background: #16a34a;
+  color: #ffffff;
+}
+
+/* ── Flash animation when an invalid key is pressed ─────── */
+@keyframes altkeys-flash {
+  0%   { background: rgba(234, 67, 53, 0.18); }
+  50%  { background: rgba(234, 67, 53, 0.28); }
+  100% { background: rgba(26, 27, 30, 0.96); }
+}
+
+#alt-keys-overlay.alt-keys-flash-invalid .alt-keys-badge {
+  border-color: #ea4335;
+  animation: altkeys-flash 0.35s ease-out forwards;
+}
+
+#alt-keys-overlay.alt-keys-flash-invalid .alt-keys-key {
+  color: #ea4335;
+}
+
+/* ── Trace Precedents / Dependents panel (trace-panel.js) ──── */
+#sheetcuts-trace {
+  position: fixed;
+  top: 132px;
+  right: 24px;
+  z-index: 10000;
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  color: #1f2937;
+  border: 1px solid #d1d5db;
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.18);
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  outline: none;
+}
+
+#sheetcuts-trace .sct-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 10px 8px 14px;
+  border-bottom: 1px solid #eef0f2;
+  cursor: move;
+  user-select: none;
+}
+
+#sheetcuts-trace .sct-title {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+  color: #374151;
+}
+
+#sheetcuts-trace .sct-title b {
+  color: #15803d;
+}
+
+#sheetcuts-trace button {
+  font-family: inherit;
+}
+
+#sheetcuts-trace .sct-icon {
+  border: none;
+  background: transparent;
+  color: #6b7280;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+}
+
+#sheetcuts-trace .sct-icon:hover { background: #f3f4f6; color: #111827; }
+
+#sheetcuts-trace .sct-tabs {
+  display: flex;
+  gap: 4px;
+  padding: 8px 12px 6px;
+}
+
+#sheetcuts-trace .sct-tab {
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  color: #4b5563;
+  border-radius: 999px;
+  padding: 3px 12px;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#sheetcuts-trace .sct-tab-on {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #fff;
+  font-weight: 600;
+}
+
+#sheetcuts-trace .sct-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+  padding: 2px 6px 6px;
+}
+
+#sheetcuts-trace .sct-msg {
+  padding: 12px 8px;
+  color: #4b5563;
+  line-height: 1.5;
+}
+
+#sheetcuts-trace .sct-err { color: #b91c1c; }
+
+#sheetcuts-trace .sct-primary {
+  margin: 0 8px 10px;
+  border: none;
+  background: #16a34a;
+  color: #fff;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+#sheetcuts-trace .sct-primary:focus-visible,
+#sheetcuts-trace .sct-tab:focus-visible,
+#sheetcuts-trace .sct-icon:focus-visible {
+  outline: 2px solid #86efac;
+  outline-offset: 1px;
+}
+
+#sheetcuts-trace .sct-list { outline: none; }
+
+#sheetcuts-trace .sct-row {
+  display: grid;
+  grid-template-columns: minmax(64px, auto) 1fr auto;
+  gap: 10px;
+  align-items: baseline;
+  padding: 6px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+#sheetcuts-trace .sct-row:hover { background: #f3f4f6; }
+
+#sheetcuts-trace .sct-row-on,
+#sheetcuts-trace .sct-row-on:hover {
+  background: #dcfce7;
+  box-shadow: inset 3px 0 0 #16a34a;
+}
+
+#sheetcuts-trace .sct-cell {
+  font-weight: 600;
+  color: #111827;
+  white-space: nowrap;
+}
+
+#sheetcuts-trace .sct-formula {
+  font-family: "Roboto Mono", Consolas, monospace;
+  font-size: 12px;
+  color: #4b5563;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#sheetcuts-trace .sct-value {
+  color: #6b7280;
+  font-size: 12px;
+  white-space: nowrap;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+#sheetcuts-trace .sct-foot {
+  padding: 7px 14px 9px;
+  border-top: 1px solid #eef0f2;
+  color: #6b7280;
+  font-size: 11px;
+}

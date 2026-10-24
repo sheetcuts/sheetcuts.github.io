@@ -1,0 +1,103 @@
+/* onboarding.css — sheetcuts.app/onboarding (web twin of the extension's
+   welcome page).  Classes are ob-* so they never collide with style.css
+   (which already uses .steps / .step on the home page). */
+
+.ob-wrap { max-width: 880px; }
+
+.ob-header { padding: 56px 0 36px; }
+.ob-header h1 { font-size: clamp(1.75rem, 3.4vw, 2.4rem); line-height: 1.2; max-width: 680px; }
+.ob-lede { font-size: 1rem !important; color: var(--text-secondary) !important; margin-top: 4px; }
+
+.ob-progress { display: flex; align-items: center; gap: 12px; margin-top: 20px; font-size: 0.85rem; font-weight: 600; color: var(--text-secondary); }
+.ob-bar { width: 200px; max-width: 50vw; height: 8px; background: var(--border); border-radius: 99px; overflow: hidden; }
+.ob-bar > div { height: 100%; width: 0; background: var(--brand); border-radius: 99px; transition: width 0.4s ease; }
+
+main.ob-wrap { padding-top: 32px; padding-bottom: 72px; }
+
+kbd {
+  display: inline-block; min-width: 22px; text-align: center; padding: 1px 7px;
+  font: 700 12px/1.6 'Inter', -apple-system, 'Segoe UI', sans-serif; color: var(--text-primary);
+  background: #fff; border: 1px solid #cbd5e1; border-bottom-width: 2px; border-radius: 6px;
+}
+
+/* Steps */
+.ob-steps { list-style: none; display: grid; gap: 16px; }
+.ob-step {
+  display: grid; grid-template-columns: 44px 1fr; gap: 16px;
+  background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 24px;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.ob-step.current { border-color: #86efac; box-shadow: 0 6px 24px rgba(22, 163, 74, 0.10); }
+.ob-num span {
+  display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%;
+  background: #f1f5f9; color: var(--text-secondary); font-weight: 800; font-size: 15px;
+}
+.ob-step.current .ob-num span { background: var(--brand); color: #fff; }
+.ob-step.done .ob-num span { background: var(--brand-light); color: var(--brand-dark); font-size: 0; }
+.ob-step.done .ob-num span::before { content: "✓"; font-size: 18px; }
+.ob-step h2 { font-size: 1.15rem; font-weight: 700; letter-spacing: -0.01em; line-height: 1.35; margin-bottom: 6px; }
+.ob-step.done h2 { color: var(--text-secondary); }
+.ob-step p { font-size: 0.95rem; color: var(--text-secondary); margin-bottom: 8px; }
+.ob-tag { font-size: 11px; font-weight: 700; color: var(--text-secondary); background: #f3f4f6; border-radius: 99px; padding: 2px 8px; vertical-align: middle; margin-left: 6px; }
+.ob-status { font-size: 0.85rem !important; min-height: 20px; margin: 6px 0 0 !important; color: var(--brand-dark) !important; font-weight: 600; }
+.ob-privacy { font-size: 0.85rem !important; background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 10px; padding: 10px 12px; }
+
+.ob-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.ob-check[aria-pressed="true"] { background: var(--brand-light); border-color: var(--brand-border); color: var(--brand-dark); }
+.ob-check[aria-pressed="true"]::before { content: "✓ "; }
+.btn:focus-visible, .ob-chip:focus-visible { outline: 3px solid #86efac; outline-offset: 2px; }
+
+/* Practice */
+.ob-practice { display: grid; grid-template-columns: minmax(0, 1fr) 240px; gap: 18px; margin-top: 14px; align-items: start; }
+.ob-tasks { list-style: none; display: grid; gap: 10px; }
+.ob-tasks li { display: flex; gap: 10px; font-size: 0.85rem; line-height: 1.5; color: var(--text-secondary); }
+.ob-tasks li b { color: var(--text-primary); }
+.ob-tick { flex: 0 0 22px; height: 22px; border-radius: 50%; border: 2px solid #cbd5e1; margin-top: 2px; transition: all 0.25s; position: relative; }
+.ob-tasks li.done .ob-tick { background: var(--brand); border-color: var(--brand); }
+.ob-tasks li.done .ob-tick::after { content: "✓"; color: #fff; font-size: 12px; font-weight: 800; position: absolute; left: 4px; top: 0; }
+.ob-tasks li.done b { color: var(--brand-dark); }
+.ob-touch-note { display: none; }
+
+/* Quick Access picker */
+.ob-qat-preview { display: flex; flex-wrap: wrap; gap: 6px; margin: 14px 0 10px; }
+.ob-qat-preview .slot { font-size: 12px; background: var(--brand-light); border: 1px solid var(--brand-border); color: var(--brand-dark); border-radius: 8px; padding: 4px 9px; font-weight: 600; }
+.ob-qat-preview .slot kbd { font-size: 11px; margin-right: 4px; }
+.ob-qat-preview .slot.empty { background: #fff; border-style: dashed; color: var(--text-muted); font-weight: 500; }
+.ob-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.ob-chip {
+  font: inherit; font-size: 0.85rem; border: 1px solid #d1d5db; background: #fff; color: var(--text-secondary);
+  border-radius: 99px; padding: 5px 12px; cursor: pointer;
+}
+.ob-chip[aria-pressed="true"] { background: var(--brand); border-color: var(--brand); color: #fff; font-weight: 600; }
+.ob-chip .n { font-size: 11px; opacity: 0.85; margin-right: 4px; }
+
+.ob-done {
+  margin-top: 20px; padding: 24px; border-radius: 16px;
+  background: linear-gradient(135deg, #ecfdf3, #fff7ed); border: 1px solid var(--brand-border);
+}
+.ob-done h2 { font-size: 1.25rem; margin-bottom: 6px; }
+.ob-done p { color: var(--text-secondary); }
+
+.ob-demo { padding: 40px 0 8px; }
+.ob-demo h2 { font-size: 1.15rem; margin-bottom: 12px; }
+.ob-demo video { width: 100%; display: block; border-radius: 14px; border: 1px solid var(--border); background: #e5e7eb; }
+
+.ob-foot { text-align: center; color: var(--text-secondary); font-size: 0.9rem; margin-top: 28px; }
+
+.ob-toast {
+  position: fixed; top: 76px; left: 50%; transform: translateX(-50%) translateY(-10px);
+  background: var(--text-primary); color: #fff; padding: 9px 16px; border-radius: 9px; font-size: 0.85rem; z-index: 200;
+  opacity: 0; transition: opacity 0.2s, transform 0.2s; pointer-events: none; max-width: calc(100vw - 32px);
+}
+.ob-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+@media (max-width: 760px) {
+  /* minmax(0, …) lets the sheet scroll inside its box instead of widening the page */
+  .ob-practice { grid-template-columns: minmax(0, 1fr); }
+  .ob-step { grid-template-columns: 1fr; padding: 18px 16px; gap: 10px; }
+}
+
+/* Touch-only devices: the sheet still renders, but say it needs a keyboard. */
+@media (hover: none) and (pointer: coarse) {
+  .ob-touch-note { display: block; font-size: 0.85rem !important; background: #fff7ed; border: 1px solid #fed7aa; border-radius: 10px; padding: 8px 12px; color: #9a3412 !important; }
+}

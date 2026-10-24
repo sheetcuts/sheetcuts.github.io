@@ -886,7 +886,7 @@ footer {
 
   .footer-inner { flex-direction: column; text-align: center; }
 
-  .footer-links { justify-content: center; }
+  .footer-links { justify-content: center; flex-wrap: wrap; row-gap: 8px; }
 
   .overlay-mockup { margin-top: 40px; }
 }
