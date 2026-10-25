@@ -92,6 +92,8 @@ const Customs = (() => {
 
   function normalize(raw) {
     const prefs = { version: 1 };
+    // Display options: the title-bar logo button (header-button.js), on by default.
+    prefs.ui = { headerButton: !(raw && raw.ui && raw.ui.headerButton === false) };
     for (const app of ['sheets', 'slides']) {
       const src = raw && raw[app];
       prefs[app] = {

@@ -271,6 +271,25 @@ const Overlay = (() => {
   }
 
   /**
+   * Show a longer-lived informational notice (e.g. "Button hidden — …").
+   */
+  function showMessage(text, ms = 3500) {
+    clearTimeout(noticeTimer);
+    const el = getContainer();
+    el.innerHTML = '';
+    el.className = 'alt-keys-executing';
+    el.style.pointerEvents = '';
+
+    const msg = document.createElement('div');
+    msg.className = 'alt-keys-notice';
+    msg.textContent = text;
+    el.appendChild(msg);
+    el.style.display = 'flex';
+
+    noticeTimer = setTimeout(hide, ms);
+  }
+
+  /**
    * Show a "coming soon" notice for unimplemented stub nodes.
    */
   function showNotImplemented(description) {
@@ -311,5 +330,5 @@ const Overlay = (() => {
     }
   }
 
-  return { show, showSignIn, showLockout, showExecuting, showNotImplemented, flashInvalid, hide };
+  return { show, showSignIn, showLockout, showExecuting, showMessage, showNotImplemented, flashInvalid, hide };
 })();
