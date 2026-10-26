@@ -1,7 +1,8 @@
 """Regenerate the shortcut lists on sheetcuts.app from the extension itself.
 
-Reads the extension's shortcut trees (../SheetCuts/shortcuts.js and
-slides-shortcuts.js), then rewrites the block between the GENERATED markers in
+Reads the extension's shortcut trees (../SheetCuts/shortcuts.js,
+slides-shortcuts.js and docs-shortcuts.js) and its free-plan/Pro list
+(custom-shortcuts.js), then rewrites the block between the GENERATED markers in
 shortcuts.html and the shortcut counts on index.html / alternatives.html /
 shortcuts.html.  Run after adding or renaming shortcuts in the extension:
 
@@ -65,6 +66,22 @@ def js_tree_to_json(path, const_name):
     return json.loads(body)
 
 
+def pro_rules():
+    """PRO_PREFIXES / PRO_ACTIONS from custom-shortcuts.js — the commands the
+    free plan doesn't include (tagged PRO on the page)."""
+    src = io.open(os.path.join(EXT, 'custom-shortcuts.js'), encoding='utf-8').read()
+    prefixes = re.findall(r"'([\w.]+)'", re.search(r'PRO_PREFIXES = \[(.*?)\]', src, re.S).group(1))
+    actions = re.findall(r"'([\w.]+)'", re.search(r'PRO_ACTIONS = new Set\(\[(.*?)\]\)', src, re.S).group(1))
+    return tuple(prefixes), set(actions)
+
+
+PRO_PREFIXES, PRO_ACTIONS = (), set()
+
+
+def is_pro(action):
+    return bool(action) and (action in PRO_ACTIONS or action.startswith(PRO_PREFIXES))
+
+
 def leaf_name(node, parent):
     if node.get('action') in ACTION_NAMES:
         return ACTION_NAMES[node['action']]
@@ -90,9 +107,10 @@ def esc(s):
     return html.escape(s, quote=False)
 
 
-def row(keys, name):
-    return ('              <div class="shortcut-row"><span class="shortcut-key">%s</span> %s</div>'
-            % (esc(keys), esc(name)))
+def row(keys, name, action=None):
+    pro = ' <span class="pro-pill">Pro</span>' if is_pro(action) else ''
+    return ('              <div class="shortcut-row"><span class="shortcut-key">%s</span> %s%s</div>'
+            % (esc(keys), esc(name), pro))
 
 
 def subgroup(label, rows):
@@ -125,14 +143,14 @@ def tab_groups(tree, order=None):
             branches = []
             for ck, node in children.items():
                 if 'action' in node:
-                    direct.append(row('Alt+' + ', '.join(path_keys + [ck]), leaf_name(node, label)))
+                    direct.append(row('Alt+' + ', '.join(path_keys + [ck]), leaf_name(node, label), node['action']))
                 elif node.get('children'):
                     only = list(node['children'].items())
                     if len(only) == 1 and 'action' in only[0][1]:
                         # One-command branch (e.g. Alt+M, A, A) — list it with
                         # its parent rather than as a one-row section.
                         gk, gnode = only[0]
-                        direct.append(row('Alt+' + ', '.join(path_keys + [ck, gk]), leaf_name(gnode, label)))
+                        direct.append(row('Alt+' + ', '.join(path_keys + [ck, gk]), leaf_name(gnode, label), gnode['action']))
                     else:
                         branches.append((ck, node))
             blocks = []
@@ -150,14 +168,19 @@ def tab_groups(tree, order=None):
 
 def beyond_ribbon():
     rows = [
-        row('Alt+1 … Alt+9', 'Quick Access Toolbar — your nine favourite commands'),
-        row('Ctrl+[', 'Trace Precedents'),
-        row('Ctrl+]', 'Trace Dependents'),
+        row('Alt+1 … Alt+9', 'Quick Access Toolbar — your nine favourite commands', 'trace.precedents'),
+        row('Ctrl+[', 'Trace Precedents', 'trace.precedents'),
+        row('Ctrl+]', 'Trace Dependents', 'trace.dependents'),
+        row('→ / ←', 'In a trace: expand / collapse a row into its own precedents'),
+        row('Ctrl+Shift+=', 'Insert rows / columns / cells (or Ctrl+Numpad +)'),
+        row('Ctrl+−', 'Delete rows / columns / cells (or Ctrl+Numpad −)'),
+        row('Ctrl+Shift+1 / 3 / 4 / 5', 'Number / Date / Currency / Percent cycles', 'cycle.number'),
+        row('Alt+↓', 'Open the filter menu on the active column'),
         row('F4', 'Repeat last action (even a colour you picked or a width you typed)'),
         row('Shift+Space', 'In a formula: turn the reference into its full row'),
         row('Ctrl+Space', 'In a formula: turn the reference into its full column'),
         row('F4', 'In a formula: toggle $ on full row/column references'),
-        row('Your choice', 'Custom shortcuts — any key combo or Alt sequence (Alt+F, T)'),
+        row('Your choice', 'Custom shortcuts — any key combo or Alt sequence (Alt+F, T)', 'trace.precedents'),
     ]
     return (['      <!-- Beyond the ribbon -->',
              '      <div class="shortcut-tab-group">',
@@ -170,14 +193,17 @@ def beyond_ribbon():
 
 
 def main():
+    global PRO_PREFIXES, PRO_ACTIONS
     sys.stdout.reconfigure(encoding='utf-8')
+    PRO_PREFIXES, PRO_ACTIONS = pro_rules()
     sheets = js_tree_to_json(os.path.join(EXT, 'shortcuts.js'), 'SHEETS_SHORTCUT_TREE')
     slides = js_tree_to_json(os.path.join(EXT, 'slides-shortcuts.js'), 'SLIDES_SHORTCUT_TREE')
-    n_sheets, n_slides = count_leaves(sheets), count_leaves(slides)
+    docs = js_tree_to_json(os.path.join(EXT, 'docs-shortcuts.js'), 'DOCS_SHORTCUT_TREE')
+    n_sheets, n_slides, n_docs = count_leaves(sheets), count_leaves(slides), count_leaves(docs)
     sheet_tabs = [k for k in ['H', 'N', 'M', 'A', 'R', 'W', 'F'] if k in sheets and not is_stub(sheets[k])]
 
     if '--labels' in sys.argv:
-        for name, tree in (('sheets', sheets), ('slides', slides)):
+        for name, tree in (('sheets', sheets), ('slides', slides), ('docs', docs)):
             def walk(ch, p):
                 for k, n in ch.items():
                     if 'action' in n:
@@ -193,10 +219,10 @@ def main():
              '        <div class="app-icon sheets">S</div>',
              '        <div>',
              '          <h2>Google Sheets</h2>',
-             '          <p>%d shortcuts across %d ribbon tabs, plus Excel 2003 Alt+E paste keys</p>' % (n_sheets, len(sheet_tabs)),
+             '          <p>%d shortcuts across %d ribbon tabs, plus Alt+C format cycles and Excel 2003 Alt+E paste keys</p>' % (n_sheets, len(sheet_tabs)),
              '        </div>',
              '      </div>', '']
-    block += tab_groups(sheets, sheet_tabs + ['E'])
+    block += tab_groups(sheets, sheet_tabs + ['C', 'E'])
     block += beyond_ribbon()
     block += ['    </div>', '',
               '    <!-- ── Google Slides ──────────────────────────────────────────── -->',
@@ -210,7 +236,18 @@ def main():
               '      </div>', '']
     block += tab_groups(slides)
     block += ['      <p class="shortcuts-coming-soon">Insert, Design, Transitions, Animations &amp; more tabs are in active development.</p>',
-              '', '    </div>']
+              '', '    </div>', '',
+              '    <!-- ── Google Docs ────────────────────────────────────────────── -->',
+              '    <div class="shortcuts-page-section" id="docs">', '',
+              '      <div class="shortcuts-app-header">',
+              '        <div class="app-icon docs">D</div>',
+              '        <div>',
+              '          <h2>Google Docs</h2>',
+              "          <p>%d shortcuts &mdash; Word&rsquo;s ribbon keys, with the same text-formatting keys as Sheets and Slides</p>" % n_docs,
+              '        </div>',
+              '      </div>', '']
+    block += tab_groups(docs, [k for k in ['H', 'N', 'P', 'S', 'R', 'W', 'F'] if k in docs])
+    block += ['    </div>']
     generated = '\n'.join(block)
 
     page = os.path.join(SITE, 'shortcuts.html')
@@ -220,7 +257,8 @@ def main():
     a_end = s.index('-->', a) + 3
     s = s[:a_end] + '\n' + generated + '\n    ' + s[b:]
     s = re.sub(r'\d+ Sheets shortcuts and \d+ Slides shortcuts', '%d Sheets shortcuts and %d Slides shortcuts' % (n_sheets, n_slides), s)
-    s = re.sub(r'&mdash; \d+ for Google Sheets, \d+ for Google Slides', '&mdash; %d for Google Sheets, %d for Google Slides' % (n_sheets, n_slides), s)
+    s = re.sub(r'&mdash; \d+ for Google Sheets, \d+ for Google Slides(, \d+ for Google Docs)?', '&mdash; %d for Google Sheets, %d for Google Slides, %d for Google Docs' % (n_sheets, n_slides, n_docs), s)
+    s = re.sub(r'\d+ Sheets shortcuts, \d+ Slides shortcuts and \d+ Docs shortcuts', '%d Sheets shortcuts, %d Slides shortcuts and %d Docs shortcuts' % (n_sheets, n_slides, n_docs), s)
     io.open(page, 'w', encoding='utf-8').write(s)
 
     for name in ('index.html', 'alternatives.html'):
@@ -232,7 +270,7 @@ def main():
         t = re.sub(r'currently has \d+ shortcuts', 'currently has %d shortcuts' % n_slides, t)
         io.open(p, 'w', encoding='utf-8').write(t)
 
-    print('Sheets: %d shortcuts, Slides: %d — shortcuts.html, index.html, alternatives.html updated' % (n_sheets, n_slides))
+    print('Sheets: %d shortcuts, Slides: %d, Docs: %d — shortcuts.html, index.html, alternatives.html updated' % (n_sheets, n_slides, n_docs))
 
 
 if __name__ == '__main__':

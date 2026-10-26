@@ -361,7 +361,7 @@ nav {
 /* ─── Features ───────────────────────────────────────────────── */
 .features-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 32px;
   margin-top: 56px;
 }
@@ -393,6 +393,8 @@ nav {
 
 .app-icon.sheets { background: #e8f5e9; color: #2e7d32; }
 .app-icon.slides { background: #fff3e0; color: #e65100; }
+.app-icon.docs { background: #e8f0fe; color: #1a56c4; }
+.pro-pill { display: inline-block; background: #16a34a; color: #fff; font-size: 10px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; border-radius: 4px; padding: 1px 5px; margin-left: 4px; vertical-align: 1px; }
 
 .feature-card h3 {
   font-size: 1.05rem;

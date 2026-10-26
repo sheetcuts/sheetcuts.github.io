@@ -85,6 +85,25 @@
   color: #fdba74;
 }
 
+/* Free plan: a Pro command — dimmed, with a PRO tag in the corner */
+.alt-keys-badge.alt-keys-locked .alt-keys-key,
+.alt-keys-badge.alt-keys-locked .alt-keys-desc {
+  opacity: 0.55;
+}
+.alt-keys-pro {
+  position: absolute;
+  top: -6px;
+  right: -5px;
+  background: #16a34a;
+  color: #fff;
+  border-radius: 4px;
+  padding: 1px 4px;
+  font-size: 8px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  line-height: 1.3;
+}
+
 /* Key letter */
 .alt-keys-key {
   color: #fbbc04;
@@ -148,9 +167,11 @@
 }
 
 /* ── Trial countdown banner ──────────────────────────────── */
+/* Dark base like the hint pill — a see-through yellow washed out over the
+   white grid. */
 .alt-keys-trial-banner {
-  background: rgba(251, 188, 4, 0.18);
-  border: 1px solid rgba(251, 188, 4, 0.50);
+  background: rgba(26, 27, 30, 0.94);
+  border: 1px solid rgba(251, 188, 4, 0.55);
   border-radius: 8px;
   color: #fbc02d;
   font-size: 13px;
@@ -243,6 +264,47 @@
   color: #ffffff;
 }
 
+/* "Signed in as …" — the account the plan will be attached to */
+.alt-keys-lockout-account {
+  margin: 2px 0 0;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 11px;
+}
+
+/* "Already subscribed? Check again" — a quiet text button */
+.alt-keys-link {
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 2px 4px;
+  color: #81c995;
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+  font-size: 11.5px;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.alt-keys-link:disabled {
+  cursor: default;
+  opacity: 0.6;
+  text-decoration: none;
+}
+
+.alt-keys-link:focus-visible {
+  outline: 2px solid #ffffff;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Status line after "Check again" or a sign-in that didn't finish */
+.alt-keys-lockout-note {
+  margin: 0;
+  color: #fbc02d;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
 /* ── Flash animation when an invalid key is pressed ─────── */
 @keyframes altkeys-flash {
   0%   { background: rgba(234, 67, 53, 0.18); }
@@ -258,6 +320,58 @@
 #alt-keys-overlay.alt-keys-flash-invalid .alt-keys-key {
   color: #ea4335;
 }
+
+/* ── What-If dialogs: Goal Seek / Data Table (analysis.js) ──── */
+#sheetcuts-dialog {
+  position: fixed;
+  top: 118px;
+  right: 24px;
+  z-index: 2147483000;
+  width: 320px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+  font: 13px/1.45 "Google Sans", Roboto, Arial, sans-serif;
+  color: #1f2937;
+  padding: 0 0 10px;
+}
+#sheetcuts-dialog .scd-head {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 10px 12px 8px 14px; border-bottom: 1px solid #f1f3f5; font-size: 14px;
+}
+#sheetcuts-dialog .scd-x {
+  border: none; background: none; cursor: pointer; color: #6b7280; font-size: 13px; padding: 2px 6px; border-radius: 6px;
+}
+#sheetcuts-dialog .scd-x:hover { background: #f3f4f6; }
+#sheetcuts-dialog .scd-note { padding: 8px 14px 0; color: #6b7280; font-size: 12px; }
+#sheetcuts-dialog .scd-field {
+  display: grid; grid-template-columns: 112px 1fr; align-items: center; gap: 8px; padding: 8px 14px 0;
+}
+#sheetcuts-dialog .scd-field span { color: #374151; }
+#sheetcuts-dialog input {
+  font: inherit; font-family: "Roboto Mono", Consolas, monospace; font-size: 12.5px;
+  border: 1px solid #d1d5db; border-radius: 7px; padding: 5px 8px; width: 100%; box-sizing: border-box; color: #111827;
+}
+#sheetcuts-dialog input:focus { outline: 2px solid #16a34a; outline-offset: 0; border-color: #16a34a; }
+#sheetcuts-dialog input[readonly] { background: #f9fafb; color: #4b5563; }
+#sheetcuts-dialog .scd-msg { padding: 8px 14px 0; font-size: 12.5px; min-height: 4px; }
+#sheetcuts-dialog .scd-error { color: #b91c1c; }
+#sheetcuts-dialog .scd-warn { color: #92400e; }
+#sheetcuts-dialog .scd-btns { display: flex; gap: 8px; justify-content: flex-end; padding: 10px 14px 0; }
+#sheetcuts-dialog .scd-btns button {
+  font: inherit; font-weight: 600; border-radius: 8px; padding: 6px 14px; cursor: pointer;
+  border: 1px solid #d1d5db; background: #ffffff; color: #374151;
+}
+#sheetcuts-dialog .scd-btns .scd-primary { background: #16a34a; border-color: #16a34a; color: #ffffff; }
+#sheetcuts-dialog .scd-btns button:disabled { opacity: 0.6; cursor: default; }
+#sheetcuts-dialog .scd-btns button:focus-visible { outline: 2px solid #86efac; outline-offset: 2px; }
+#sheetcuts-dialog .scd-hint { padding: 8px 14px 0; color: #9ca3af; font-size: 11.5px; }
+#sheetcuts-dialog .scd-result { padding: 10px 14px 0; }
+#sheetcuts-dialog .scd-result-title { font-weight: 600; color: #15803d; margin-bottom: 6px; }
+#sheetcuts-dialog .scd-kv { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; font-size: 12.5px; }
+#sheetcuts-dialog .scd-kv b { font-family: "Roboto Mono", Consolas, monospace; font-weight: 600; }
+#sheetcuts-dialog .scd-small { color: #6b7280; font-size: 11.5px; margin-top: 6px; }
 
 /* ── Trace Precedents / Dependents panel (trace-panel.js) ──── */
 #sheetcuts-trace {
@@ -383,7 +497,7 @@
 
 #sheetcuts-trace .sct-row {
   display: grid;
-  grid-template-columns: minmax(64px, auto) 1fr auto;
+  grid-template-columns: auto minmax(64px, auto) 1fr auto;
   gap: 10px;
   align-items: baseline;
   padding: 6px 8px;
@@ -397,6 +511,25 @@
 #sheetcuts-trace .sct-row-on:hover {
   background: #dcfce7;
   box-shadow: inset 3px 0 0 #16a34a;
+}
+
+/* Tree: ▸ expands a result into its own precedents / dependents */
+#sheetcuts-trace .sct-caret {
+  display: inline-block;
+  min-width: 12px;
+  color: #6b7280;
+  font-size: 11px;
+  text-align: center;
+  user-select: none;
+}
+
+#sheetcuts-trace .sct-caret[title]:hover { color: #16a34a; }
+
+#sheetcuts-trace .sct-note {
+  padding: 3px 8px 5px;
+  font-size: 12px;
+  color: #9ca3af;
+  font-style: italic;
 }
 
 #sheetcuts-trace .sct-cell {

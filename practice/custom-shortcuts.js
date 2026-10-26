@@ -3,7 +3,7 @@
 /**
  * custom-shortcuts.js — Quick Access Toolbar + custom shortcuts.
  *
- * Shared by the content scripts (Sheets + Slides) and options.html.
+ * Shared by the content scripts (Sheets, Slides, Docs) and options.html.
  *
  * Preferences live in chrome.storage.sync under STORAGE_KEY, per app:
  *   {
@@ -12,6 +12,7 @@
  *               custom: [{ action, seq: ['Q','W'] }   // Alt › Q › W
  *                       | { action, chord: { ctrl, alt, shift, meta, code } }] },
  *     slides: { … same shape … },
+ *     docs:   { … same shape … },
  *   }
  *
  * The content script builds an EFFECTIVE tree from the built-in one (the
@@ -34,29 +35,78 @@ const Customs = (() => {
       qat: ['shapeFill', 'fontColor', 'arrangeAlignCenter', 'bringToFront', 'group'],
       custom: [],
     },
+    docs: {
+      qat: ['docs.style.normal', 'docs.style.h1', 'docs.style.h2', 'highlightColor', 'pasteWithoutFormatting'],
+      custom: [],
+    },
   };
+  const APPS = ['sheets', 'slides', 'docs'];
+  const APP_LABELS = { sheets: 'Sheets', slides: 'Slides', docs: 'Docs' };
+
+  // ── Free plan vs Pro (Admin Files/freemium-plan.md) ──────────────────────
+  // After the 14-day trial an account keeps every command except these — the
+  // analyst toolkit — plus the Quick Access Toolbar and custom shortcuts,
+  // which are Pro as a whole (content.js gates those by where a key came from).
+  const PRO_PREFIXES = ['paste.', 'whatif.', 'cycle.', 'autocolor.', 'swap.'];
+  const PRO_ACTIONS = new Set([
+    'trace.precedents', 'trace.dependents',            // formula auditing
+    'copy.picture',
+    'groupRows', 'ungroupRows', 'hideDetail', 'showDetail',
+    'removeDuplicates', 'textToColumns', 'dataValidation',
+  ]);
+  function isPro(action) {
+    return typeof action === 'string' && (PRO_ACTIONS.has(action) || PRO_PREFIXES.some(p => action.startsWith(p)));
+  }
+  // A key-tip node the free plan can't run: a Pro command, a Quick Access
+  // slot or a custom sequence — or a branch holding nothing else.
+  function isLockedNode(node) {
+    if (!node) return false;
+    if (node.action) return !!(node.qat || node.custom) || isPro(node.action);
+    const kids = Object.values(node.children || {});
+    return kids.length > 0 && kids.every(isLockedNode);
+  }
 
   // Built-in direct key combos (Excel's own, no Alt needed).  A user's custom
   // combo on the same keys wins.  Ctrl (not ⌘) on every OS, like Excel.
+  const ctrl = (code, shift = false) => ({ ctrl: true, alt: false, shift, meta: false, code });
   const BUILTIN_CHORDS = {
     sheets: [
-      { action: 'trace.precedents', chord: { ctrl: true, alt: false, shift: false, meta: false, code: 'BracketLeft' } },
-      { action: 'trace.dependents', chord: { ctrl: true, alt: false, shift: false, meta: false, code: 'BracketRight' } },
+      { action: 'trace.precedents', chord: ctrl('BracketLeft') },
+      { action: 'trace.dependents', chord: ctrl('BracketRight') },
+      // Insert / delete: whole rows or columns selected → those; else the
+      // Cells ▸ shift… submenu (Excel's Insert/Delete dialog).  Ctrl+− replaces
+      // the browser's zoom-out inside Sheets, exactly as in Excel.
+      { action: 'insert.smart', chord: ctrl('Equal', true),   description: 'Insert Rows / Columns / Cells' },
+      { action: 'insert.smart', chord: ctrl('NumpadAdd'),     description: 'Insert Rows / Columns / Cells' },
+      { action: 'delete.smart', chord: ctrl('Minus'),         description: 'Delete Rows / Columns / Cells' },
+      { action: 'delete.smart', chord: ctrl('NumpadSubtract'), description: 'Delete Rows / Columns / Cells' },
+      // Excel/Sheets' own number-format keys, upgraded to cycles (Macabacus).
+      { action: 'cycle.number',   chord: ctrl('Digit1', true) },
+      { action: 'cycle.date',     chord: ctrl('Digit3', true) },
+      { action: 'cycle.currency', chord: ctrl('Digit4', true) },
+      { action: 'cycle.percent',  chord: ctrl('Digit5', true) },
     ],
     slides: [],
+    docs: [],
   };
 
   const IS_MAC = typeof navigator !== 'undefined' && /Mac/i.test(navigator.platform || '');
+  // What to call the Alt key on screen: a Mac keyboard says Option (⌥).
+  const ALT_KEY = IS_MAC ? '⌥' : 'Alt';
+  const ALT_NAME = IS_MAC ? '⌥ Option' : 'Alt';
 
   // ── Trees & catalog ──────────────────────────────────────────────────────
 
   function baseTree(app) {
     if (app === 'slides') return typeof SLIDES_SHORTCUT_TREE !== 'undefined' ? SLIDES_SHORTCUT_TREE : {};
+    if (app === 'docs') return typeof DOCS_SHORTCUT_TREE !== 'undefined' ? DOCS_SHORTCUT_TREE : {};
     return typeof SHEETS_SHORTCUT_TREE !== 'undefined' ? SHEETS_SHORTCUT_TREE : {};
   }
 
   function appForUrl(url) {
-    return /\/presentation\//.test(url || '') ? 'slides' : 'sheets';
+    if (/\/presentation\//.test(url || '')) return 'slides';
+    if (/\/document\//.test(url || '')) return 'docs';
+    return 'sheets';
   }
 
   /**
@@ -94,7 +144,19 @@ const Customs = (() => {
     const prefs = { version: 1 };
     // Display options: the title-bar logo button (header-button.js), on by default.
     prefs.ui = { headerButton: !(raw && raw.ui && raw.ui.headerButton === false) };
-    for (const app of ['sheets', 'slides']) {
+    // Format / colour cycle lists the user edited (cycles.js); others use
+    // the defaults.  Loose checks: ≤ 12 non-empty strings of ≤ 120 chars.
+    prefs.cycles = {};
+    const rc = raw && raw.cycles;
+    if (rc && typeof rc === 'object') {
+      for (const [id, list] of Object.entries(rc)) {
+        if (!/^[a-z]+$/.test(id) || !Array.isArray(list)) continue;
+        const clean = list.filter(x => typeof x === 'string' && x.trim() && x.length <= 120)
+          .map(x => x.trim()).slice(0, 12);
+        if (clean.length) prefs.cycles[id] = clean;
+      }
+    }
+    for (const app of APPS) {
       const src = raw && raw[app];
       prefs[app] = {
         qat: Array.isArray(src && src.qat) ? src.qat.filter(a => typeof a === 'string').slice(0, QAT_SLOTS)
@@ -273,10 +335,10 @@ const Customs = (() => {
     const builtin = (BUILTIN_CHORDS[app] || []).find(b => chordId(b.chord) === id);
     if (builtin) {
       const info = describe(app, builtin.action);
-      return { warning: `Replaces SheetCuts’ built-in ${chordLabel(ch)} (${info ? info.description : builtin.action}).` };
+      return { warning: `Replaces SheetCuts’ built-in ${chordLabel(ch)} (${info ? info.description : builtin.description || builtin.action}).` };
     }
     const native = NATIVE[id.replace(/^meta\+/, 'ctrl+')];
-    if (native) return { warning: `Replaces ${app === 'slides' ? 'Slides' : 'Sheets'}’ own ${chordLabel(ch)} (${native}) while SheetCuts is on.` };
+    if (native) return { warning: `Replaces ${APP_LABELS[app] || 'Sheets'}’ own ${chordLabel(ch)} (${native}) while SheetCuts is on.` };
     return {};
   }
 
@@ -285,21 +347,23 @@ const Customs = (() => {
   function chordMap(app, prefs) {
     const map = new Map();
     for (const b of BUILTIN_CHORDS[app] || []) {
-      const info = describe(app, b.action);
+      // Chord-only commands (no ribbon key) carry their own description.
+      const info = describe(app, b.action) || (b.description ? { description: b.description } : null);
       if (info) map.set(chordId(b.chord), { action: b.action, description: info.description });
     }
     for (const c of prefs[app].custom || []) {
       if (!c.chord) continue;
       const info = describe(app, c.action);
       if (info && !checkChord(app, { [app]: { custom: [] } }, c.chord).error) {
-        map.set(chordId(c.chord), { action: c.action, description: info.description });
+        map.set(chordId(c.chord), { action: c.action, description: info.description, custom: true });
       }
     }
     return map;
   }
 
   return {
-    STORAGE_KEY, QAT_SLOTS, OPTIONS_ACTION, DEFAULTS, BUILTIN_CHORDS, IS_MAC,
+    STORAGE_KEY, QAT_SLOTS, OPTIONS_ACTION, DEFAULTS, BUILTIN_CHORDS, IS_MAC, ALT_KEY, ALT_NAME,
+    APPS, APP_LABELS, isPro, isLockedNode,
     baseTree, appForUrl, catalog, describe,
     normalize, load, save, onChange,
     buildTree, sequenceConflict,

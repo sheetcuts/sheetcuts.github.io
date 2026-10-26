@@ -85,6 +85,7 @@ const SHEETS_SHORTCUT_TREE = {
       E: {
         key: 'E', label: 'E', description: 'Clear',
         children: {
+          A: { key: 'A', label: 'A', description: 'Clear All',       action: 'clearAll' },
           F: { key: 'F', label: 'F', description: 'Clear Formats',   action: 'clearFormats' },
           C: { key: 'C', label: 'C', description: 'Clear Contents',  action: 'clearContents' },
         },
@@ -126,6 +127,15 @@ const SHEETS_SHORTCUT_TREE = {
       },
 
       // ── H: Fill Color ─────────────────────────────────────────────────────
+      // Excel's Copy ▸ Copy as Picture (Alt+H,C,P) — image-export.js
+      C: {
+        key: 'C', label: 'C', description: 'Copy',
+        children: {
+          P: { key: 'P', label: 'P', description: 'Copy as Picture', action: 'copy.picture' },
+        },
+      },
+      // Excel's Increase Indent — Sheets has no indent, so a padded text format.
+      6: { key: '6', label: '6', description: 'Indent Cycle', action: 'cycle.indent' },
       H: { key: 'H', label: 'H', description: 'Fill Color', action: 'fillColor.open' },
 
       // ── I: Insert ─────────────────────────────────────────────────────────
@@ -210,6 +220,7 @@ const SHEETS_SHORTCUT_TREE = {
           R: { key: 'R', label: 'R', description: 'Paste Formatting',  action: 'paste.formatting' },
           E: { key: 'E', label: 'E', description: 'Transpose',         action: 'paste.transpose' },
           W: { key: 'W', label: 'W', description: 'Paste Col Widths',  action: 'paste.columnWidths' },
+          B: { key: 'B', label: 'B', description: 'No Borders',        action: 'paste.noBorders' },
         },
       },
 
@@ -297,6 +308,14 @@ const SHEETS_SHORTCUT_TREE = {
       },
       H: { key: 'H', label: 'H', description: 'Hide Detail', action: 'hideDetail' },
       J: { key: 'J', label: 'J', description: 'Show Detail', action: 'showDetail' },
+      // ── What-If Analysis (Excel Alt+A,W,G / T) — analysis.js ─────────────
+      W: {
+        key: 'W', label: 'W', description: 'What-If Analysis',
+        children: {
+          G: { key: 'G', label: 'G', description: 'Goal Seek',  action: 'whatif.goalSeek' },
+          T: { key: 'T', label: 'T', description: 'Data Table', action: 'whatif.dataTable' },
+        },
+      },
     },
   },
   R: {
@@ -364,6 +383,43 @@ const SHEETS_SHORTCUT_TREE = {
     },
   },
 
+  // ── C: Cycles (Macabacus-style; see cycles.js) ─────────────────────────────
+  // Each press applies the next format/colour in the cycle; lists are editable
+  // in SheetCuts Settings.  Ctrl+Shift+1/3/4/5 run Number/Date/Currency/Percent.
+  C: {
+    key: 'C', label: 'C', description: 'Cycles',
+    children: {
+      N: { key: 'N', label: 'N', description: 'Number Cycle',       action: 'cycle.number' },
+      P: { key: 'P', label: 'P', description: 'Percent Cycle',      action: 'cycle.percent' },
+      X: { key: 'X', label: 'X', description: 'Multiples Cycle',    action: 'cycle.multiple' },
+      C: { key: 'C', label: 'C', description: 'Currency Cycle',     action: 'cycle.currency' },
+      F: { key: 'F', label: 'F', description: 'Foreign Currency',   action: 'cycle.foreign' },
+      D: { key: 'D', label: 'D', description: 'Date Cycle',         action: 'cycle.date' },
+      U: { key: 'U', label: 'U', description: 'K / M / B Units',    action: 'cycle.units' },
+      Y: { key: 'Y', label: 'Y', description: 'Yes / No Cycle',     action: 'cycle.binary' },
+      I: { key: 'I', label: 'I', description: 'Indent Cycle',       action: 'cycle.indent' },
+      T: { key: 'T', label: 'T', description: 'Font Color Cycle',   action: 'cycle.font' },
+      L: { key: 'L', label: 'L', description: 'Fill Color Cycle',   action: 'cycle.fill' },
+      O: { key: 'O', label: 'O', description: 'Border Color Cycle', action: 'cycle.border' },
+      A: {
+        key: 'A', label: 'A', description: 'Auto-Color',
+        children: {
+          S: { key: 'S', label: 'S', description: 'Auto-Color Selection', action: 'autocolor.selection' },
+          H: { key: 'H', label: 'H', description: 'Auto-Color Sheet',     action: 'autocolor.sheet' },
+        },
+      },
+      B: {
+        key: 'B', label: 'B', description: 'Border Style Cycle',
+        children: {
+          T: { key: 'T', label: 'T', description: 'Top Border',    action: 'cycle.border.top' },
+          B: { key: 'B', label: 'B', description: 'Bottom Border', action: 'cycle.border.bottom' },
+          L: { key: 'L', label: 'L', description: 'Left Border',   action: 'cycle.border.left' },
+          R: { key: 'R', label: 'R', description: 'Right Border',  action: 'cycle.border.right' },
+        },
+      },
+    },
+  },
+
   // ── E: Excel 2003 Edit menu (legacy keys Excel still honours) ─────────────
   // Finance users type Alt+E,S,V (Paste Special › Values) from muscle memory.
   E: {
@@ -377,6 +433,9 @@ const SHEETS_SHORTCUT_TREE = {
           T: { key: 'T', label: 'T', description: 'Formats',       action: 'paste.formatting' },
           W: { key: 'W', label: 'W', description: 'Column Widths', action: 'paste.columnWidths' },
           E: { key: 'E', label: 'E', description: 'Transpose',     action: 'paste.transpose' },
+          X: { key: 'X', label: 'X', description: 'All Except Borders', action: 'paste.noBorders' },
+          N: { key: 'N', label: 'N', description: 'Validation',    action: 'paste.validation' },
+          G: { key: 'G', label: 'G', description: 'Cond. Formatting', action: 'paste.conditional' },
           S: { key: 'S', label: 'S', description: 'All options…',  action: 'paste.special' },
         },
       },
